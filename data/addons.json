@@ -1,0 +1,7 @@
+{
+"extra cheese": {"price": 2.49, "description": "Additional cheese on your pizza"},
+"garlic bread": {"price": 4.99, "description": "Freshly baked garlic bread with butter and herbs"},
+"soft drink": {"price": 1.99, "description": "A refreshing soft drink to accompany your meal"},
+"cinnamon roll": {"price": 3.99, "description": "A sweet treat to finish your meal"},
+"stuffed crust": {"price": 3.00, "description": "Upgrade your pizza to a stuffed crust for an additional cost"}
+}

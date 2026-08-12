@@ -1,0 +1,9 @@
+{
+"Cheese pizza": {"price": 13.99, "ingredients": ["cheese", "tomato sauce", "pizza dough"]},
+"garlic pizza": {"price": 13.99, "ingredients": ["cheese", "tomato sauce", "pizza dough", "garlic"]},
+"Pepperoni pizza": {"price": 14.99, "ingredients": ["cheese", "tomato sauce", "pizza dough", "pepperoni"]},
+"Veggie pizza": {"price": 9.99, "ingredients": ["cheese", "tomato sauce", "pizza dough", "bell peppers", "onions", "mushrooms"]},
+"BBQ chicken pizza": {"price": 16.99, "ingredients": ["cheese", "BBQ sauce", "pizza dough", "chicken", "red onions", "cilantro"]},
+"Meat lovers pizza": {"price": 16.99, "ingredients": ["cheese", "tomato sauce", "pizza dough", "pepperoni", "sausage", "bacon", "ham"]},
+"Margherita pizza": {"price": 13.99, "ingredients": ["cheese", "tomato sauce", "pizza dough", "fresh basil"]}
+}

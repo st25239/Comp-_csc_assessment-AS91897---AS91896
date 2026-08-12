@@ -1,0 +1,40 @@
+{extends "base.html"}
+
+{block title}Invoice{endblock}
+
+{block content}
+
+<h1>Invoice</h1>
+<p><strong>Thank you for your order! {{ customer_name }}</strong></p>
+<p><strong>Invoice Number:</strong> {{ invoice_number }}</p>
+<p><strong>Date:</strong> {{ invoice_date }}</p>
+<h2>Items</h2>
+
+<ul>
+    {% for Pizza, details in cart.items() %}
+        <li>
+            {{ Pizza }}:
+            {{ details.quantity }} x ${{ "%.2f"|format(details.price) }} 
+            = ${{ "%.2f"|format(details.quantity * details.price) }}
+        </li>
+    {% endfor %}
+</ul>
+
+{% if selected_addons %}
+    <h2>Add-ons</h2>
+    
+   <ul>
+    {% for Add-ons, details in cart.items() %}
+        <li>
+            {{ Add-ons }}:
+            {{ details.quantity }} x ${{ "%.2f"|format(details.price) }} 
+            = ${{ "%.2f"|format(details.quantity * details.price) }}
+        </li>
+    {% endfor %}
+</ul>
+{% endif %}
+<h2>Total: ${{ "%.2f"|format(total) }}</h2>
+
+<a href="{{ url_for('index') }}">Back to Shop</a>
+
+{% endblock %}
