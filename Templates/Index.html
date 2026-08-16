@@ -12,12 +12,28 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+ <container>
+        <header>
+            <h1>Welcome to My Pizza Website</h1>
+        </header>
+        <div class="featured-pizzas">
+        
+        {% for pizza, details in featured_pizzas %}
+        <div id="featured-pizzas-items">
+            <label>{{ pizza.replace('-', ' ')|title }}</label>
+            <img src="{{ url_for('static', filename=details['img_path']) }}">
+        </div>
+        {% endfor %}
+    </div>
+</container>
+
+
     <main class="page-shell">
         <section class="coder-card">
             <section class="grid-panel">
                 <!-- add to cart form -->
                 <article class="panel panel-form">
-                    <from action="{{url_for(add_to_cart)}}" method="post">
+                    <from action="{{url_for('add_to_cart')}}" method="post">
                     <button type="submit">Add to Cart</button>
                     <fieldset>
                         <legend> for="pizza">Choose a Pizza</legend>

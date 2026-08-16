@@ -1,5 +1,17 @@
 {
-"Cheese pizza": {"price": 13.99, "ingredients": ["cheese", "tomato sauce", "pizza dough"]},
+    "Cheese pizza": {
+        PUT IMAGE HERE
+        "sizes": {
+            "small": 10.99,
+            "medium": 13.99,
+            "large": 16.99
+        },
+        "ingredients": [
+            "cheese", 
+            "tomato sauce", 
+            "pizza dough"   
+    ]
+},
 "garlic pizza": {"price": 13.99, "ingredients": ["cheese", "tomato sauce", "pizza dough", "garlic"]},
 "Pepperoni pizza": {"price": 14.99, "ingredients": ["cheese", "tomato sauce", "pizza dough", "pepperoni"]},
 "Veggie pizza": {"price": 9.99, "ingredients": ["cheese", "tomato sauce", "pizza dough", "bell peppers", "onions", "mushrooms"]},
