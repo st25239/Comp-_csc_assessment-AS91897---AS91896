@@ -55,7 +55,14 @@ def order_history():
             })
     return render_template('order_history.html', orders=orders)
 
-@app.route('/c')
+@app.route('/cancel_saved_order/<int:order_id>', methods=['POST'])
+def cancel_saved_order(order_id):
+    with sqlite3.connect('Pizza_Place.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute('DELETE FROM orders WHERE id = ?', (order_id,))
+        conn.commit()
+    flash(f'Order {order_id} has been cancelled.')
+    return redirect(url_for('order_history'))
 
 
 
