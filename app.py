@@ -36,6 +36,7 @@ def initialise_database():
         conn.commit()
 
 @app.route('/orders')
+# the code that displays the order history page and retrieves the order data from the database.
 def order_history():
     with sqlite3.connect('Pizza_Place.db') as conn:
         cursor = conn.cursor()
@@ -56,6 +57,7 @@ def order_history():
     return render_template('order_history.html', orders=orders)
 
 @app.route('/cancel_saved_order/<int:order_id>', methods=['POST'])
+# the code that cancels a saved order from the order history page and removes it from the database.
 def cancel_saved_order(order_id):
     with sqlite3.connect('Pizza_Place.db') as conn:
         cursor = conn.cursor()
@@ -64,9 +66,10 @@ def cancel_saved_order(order_id):
     flash(f'Order {order_id} has been cancelled.')
     return redirect(url_for('order_history'))
 
-
-
-
+@app.route('/calculate_total')
+# the code that calculates the total price of the order based on the selected pizza, size, quantity, and any selected add-ons.
+def calculate_total(cart, selected_addons):
+   
 
 if __name__ == '__main__':
     initialise_database()
