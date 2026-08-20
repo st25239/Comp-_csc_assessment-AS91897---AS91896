@@ -1,21 +1,84 @@
 {
-    "Cheese pizza": {
-        PUT IMAGE HERE
+    "Margherita": {
+        "img_path": "static/images/margherita.png",
         "sizes": {
             "small": 10.99,
             "medium": 13.99,
             "large": 16.99
-        },
-        "ingredients": [
-            "cheese", 
-            "tomato sauce", 
-            "pizza dough"   
-    ]
+        }
+    
 },
-"garlic pizza": {"price": 13.99, "ingredients": ["cheese", "tomato sauce", "pizza dough", "garlic"]},
-"Pepperoni pizza": {"price": 14.99, "ingredients": ["cheese", "tomato sauce", "pizza dough", "pepperoni"]},
-"Veggie pizza": {"price": 9.99, "ingredients": ["cheese", "tomato sauce", "pizza dough", "bell peppers", "onions", "mushrooms"]},
-"BBQ chicken pizza": {"price": 16.99, "ingredients": ["cheese", "BBQ sauce", "pizza dough", "chicken", "red onions", "cilantro"]},
-"Meat lovers pizza": {"price": 16.99, "ingredients": ["cheese", "tomato sauce", "pizza dough", "pepperoni", "sausage", "bacon", "ham"]},
-"Margherita pizza": {"price": 13.99, "ingredients": ["cheese", "tomato sauce", "pizza dough", "fresh basil"]}
+"garlic": {
+    "img_path": "static/images/Garlic.png",
+    "sizes": {
+        "small": 10.99,
+        "medium": 13.99,
+        "large": 16.99
+    }
+},
+
+"Pepperoni": {
+    "img_path": "static/images/Pepperoni.png",
+    "sizes": {
+        "small": 12.99,
+        "medium": 15.99,
+        "large": 18.99
+    }
+},
+"Veggie Boomerang": {
+    "img_path": "static/images/Veggie_Boomerang.png",
+    "sizes": {
+        "small": 9.99,
+        "medium": 12.99,
+        "large": 15.99
+    }
+},
+"BBQ chicken": {
+    "img_path": "static/images/BBQ_Chicken.png",
+    "sizes": {
+        "small": 14.99,
+        "medium": 17.99,
+        "large": 20.99
+    }
+},
+"Meat lovers": {
+    "img_path": "static/images/Meat_Lovers.png",
+    "sizes": {
+        "small": 14.99,
+        "medium": 17.99,
+        "large": 20.99
+    }
+},
+"Butter Chicken": {
+    "img_path": "static/images/Butter_Chicken.png",
+    "sizes": {
+        "small": 14.99,
+        "medium": 17.99,
+        "large": 20.99
+    }
+},
+"Meat Boomerang": {
+    "img_path": "static/images/Meat_Boomerang.png",
+    "sizes": {
+        "small": 14.99,
+        "medium": 17.99,
+        "large": 20.99
+    }
+},
+"Chicken Peri Peri": {
+    "img_path": "static/images/Chicken_Peri_Peri.png",
+    "sizes": {
+        "small": 14.99,
+        "medium": 17.99,
+        "large": 20.99
+    }
+},
+"Prawn Boomerang": {
+    "img_path": "static/images/Prawn_Boomerang.png",
+    "sizes": {
+        "small": 14.99,
+        "medium": 17.99,
+        "large": 20.99
+    }
+}
 }
