@@ -69,7 +69,20 @@ def cancel_saved_order(order_id):
 @app.route('/calculate_total')
 # the code that calculates the total price of the order based on the selected pizza, size, quantity, and any selected add-ons.
 def calculate_total(cart, selected_addons):
-   
+    total = sum(details['quantity'] * details['price'] for details in cart.values())
+    total += sum(price for price in selected_addons.values())
+    discount_applied = False
+    total = sum(details['quantity'] * details['price'] for details in cart.values())
+    
+    if total > 100 and not discount_applied:
+        discount = total * 0.10  # Calculate the discount amount
+        total -= discount  # Apply the discount
+        discount_applied = True
+        display_discount_message = f"A 10% discount has been applied to your order. You saved ${discount:.2f}."
+        flash(display_discount_message)
+
+    return total
+
 
 if __name__ == '__main__':
     initialise_database()
