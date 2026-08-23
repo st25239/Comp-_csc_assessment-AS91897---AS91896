@@ -85,11 +85,11 @@ def calculate_total(cart, selected_addons):
 
 @app.route('/cancel_order', methods=['POST'])
 def cancel_order():
-session.pop('cart', None)
-session.pop('selected_addons', None)
-flash('Your order has been cancelled.')
-session.modified = True 
-return redirect(url_for('index'))
+    session.pop('cart', None)
+    session.pop('selected_addons', None)
+    flash('Your order has been cancelled.')
+    session.modified = True 
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     initialise_database()
