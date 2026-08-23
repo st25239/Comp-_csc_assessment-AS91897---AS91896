@@ -91,6 +91,36 @@ def cancel_order():
     session.modified = True 
     return redirect(url_for('index'))
 
+@app.route('/')
+def index():
+    cart = session.get('cart', {})
+    selected_addons = session.get('selected_addons', {}) # get selected add-ons from session
+    pizza, addons = load_data()
+    total = calculate_total(cart, selected_addons) #calculate total price based on cart and selected add-ons
+    return render_template('index.html', pizza=pizza, addons=addons, cart=cart, total=total, selected_addons=selected_addons)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 if __name__ == '__main__':
     initialise_database()
     app.run(debug=True)
