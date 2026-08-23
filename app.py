@@ -35,6 +35,21 @@ def initialise_database():
         ''')
         conn.commit()
 
+def load_data():
+    try:
+        with open('data/pizza.json') as f:
+            pizza = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        print(f"Error loading pizza data: {e}")
+        pizza = []
+    try:
+        with open('data/addons.json') as f:
+            addons = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        print(f"Error loading addons data: {e}")
+        addons = []
+    return pizza, addons
+
 @app.route('/orders')
 # the code that displays the order history page and retrieves the order data from the database.
 def order_history():
