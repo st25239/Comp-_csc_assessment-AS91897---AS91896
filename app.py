@@ -115,22 +115,29 @@ def index():
     return render_template('index.html', pizza=pizza, addons=addons, cart=cart, total=total, selected_addons=selected_addons)
 
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
+@app.route('/checkout', methods=['POST'])
+def checkout():
+    customer_name = request.form.get['customer_name'].strip().title()
+    cart = session.get('cart', {})
+    selected_addons = session.get('selected_addons', {})
+    total = calculate_total(cart, selected_addons)
+    invoice_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+    invoice_number = f"INV-{customer_name.replace(' ', '_')}_{invoice_date}"
 
+    with sqlite3.connect('Pizza_Place.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO orders (invoice_number, customer_name, size, cart, total, addons, order_date)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        ''', (invoice_number, customer_name, json.dumps(cart), total, json.dumps(selected_addons), total))
+        conn.commit()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+        # make invoice file
+        invoice_
 
 
 
