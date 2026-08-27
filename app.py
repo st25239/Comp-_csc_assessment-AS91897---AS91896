@@ -136,13 +136,51 @@ def checkout():
         ''', (invoice_number, customer_name, json.dumps(cart), total, json.dumps(selected_addons), total))
         conn.commit()
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         # make invoice file
-        invoice_
+    invoice_filename = f"invoice_{invoice_number}.txt"
 
+    try:
+            with open(invoice_filename, 'w') as f:
+                f.write(f"Invoice Number: {invoice_number}\n")
+                f.write(f"Customer Name: {customer_name}\n")
+                f.write(f"Date: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}\n")
+                f.write("Items:\n")
+                for item, details in cart.items():
+                    f.write(f"- {item} (Size: {details['size']}, Quantity: {details['quantity']}, Price: ${details['price']:.2f})\n")
+                if selected_addons:
+                    f.write("Add-ons:\n")
+                    for addon, price in selected_addons.items():
+                        f.write(f"- {addon}: ${price:.2f}\n")
+                f.write(f"Total: ${total:.2f}\n")
+    except Exception as e:
+            flash(f"could not create invoice file")
+            print(f"Error creating invoice file: {e}")
 
-
+        # this rests the cart are purchase
+    session.pop('cart', None)
+    session.pop('selected_addons', None)
+    session.modified = True
+    return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
     initialise_database()
-    app.run(debug=True)
+    app.run(debug=True )
