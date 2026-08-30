@@ -119,12 +119,30 @@ def index():
 def about():
     return render_template('about.html')
 
+@app.route('/add_to_cart', methods=['POST'])
+def add_to_cart():
+    pizza = request.form.get('pizza')
+    size = request.form['size']
+    pizzas, addons = load_data()  # Load pizza and addons data
+    quantity = int(request.form['quantity'])
+    price = float(request.form['price'])
+    cart = session.get('cart', {})
 
+    if pizza not in pizza:
+        flash(f"{pizza} is not available.")
+        return redirect(url_for('index')) # redirect to the index page if the pizza is not available    
 
+    if pizza in cart:
+        cart[pizza]['quantity'] += quantity
+    else:
+        cart[pizza] = {
+            'quantity': quantity, # store the quantity of the pizza in the cart
+            'size': size,
+            'price': pizzas[pizza]['price']
+        }
 
-
-
-
+    session['cart'] = cart
+    session.modified = True
 
 
 
