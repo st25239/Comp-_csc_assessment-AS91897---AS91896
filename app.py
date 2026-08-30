@@ -119,9 +119,35 @@ def index():
 def about():
     return render_template('about.html')
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @app.route('/checkout', methods=['POST'])
 def checkout():
-    customer_name = request.form.get['customer_name'].strip().title()
+    customer_name = request.form['customer_name'].strip().title()
     cart = session.get('cart', {})
     selected_addons = session.get('selected_addons', {})
     total = calculate_total(cart, selected_addons)
@@ -136,25 +162,7 @@ def checkout():
         ''', (invoice_number, customer_name, json.dumps(cart), total, json.dumps(selected_addons), total))
         conn.commit()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        # make invoice file
+            # make invoice file
     invoice_filename = f"invoice_{invoice_number}.txt"
 
     try:
@@ -174,11 +182,42 @@ def checkout():
             flash(f"could not create invoice file")
             print(f"Error creating invoice file: {e}")
 
-        # this rests the cart are purchase
+    try:
+        if not customer_name:
+            flash("please enter your name before proceeding to checkout.")
+            return redirect(url_for('index')) # redirect to the index page if the customer name is empty
+
+        if not cart:
+            flash("Your cart is empty. Please add items to your cart before proceeding to checkout.")
+            return redirect(url_for('index')) # redirect to the index page if the cart is empty
+
+        with open('data/pizza.json', 'w') as f: 
+            json.dump(pizza_data, f) 
+
+        with open('data/pizza.json', 'r') as file:
+            pizza_data = json.load(file) # load the pizza data from the JSON file
+
+        for pizza_name, details in cart.items():
+            if pizza_name in pizza_data:
+                pizza_data[pizza_name]['stock'] -= details['quantity']
+                if pizza_data[pizza_name]['stock'] < 0:
+                    pizza_data[pizza_name]['stock'] = 0 # prevent negative stock values
+
+        with open('data/pizza.json', 'w') as file:
+            json.dump(pizza_data, file, indent=4)
+
+    except Exception as e:
+        flash(f"An error occurred while updating the stock: {e}")
+        return redirect(url_for('index'))
+
+    
+
+    # this resets the cart after purchase
     session.pop('cart', None)
     session.pop('selected_addons', None)
     session.modified = True
-    return redirect(url_for('index'))
+
+    return render_template('invoice.html', customer_name=customer_name, cart=cart, total=total, selected_addons=selected_addons, invoice_number=invoice_number, invoice_date=invoice_date)
 
 
 if __name__ == '__main__':
