@@ -159,9 +159,12 @@ def remove_from_cart(item):
         flash(f'{item} not found in cart.')
     return redirect('/')
 
+@app.route ('/selection_addon',methods=['POST'])
+def select_addon():
+    selected_addons = {}
+    _, addons = load_data() # we only need addons
 
-
-
+    selected_keys = request
 
 
 

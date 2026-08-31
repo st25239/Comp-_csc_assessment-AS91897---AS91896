@@ -2,7 +2,7 @@
     "Margherita": {
         "img_path": "static/images/margherita.png",
         "sizes": {
-            "small": 10.99,
+            "small": 11.99,
             "medium": 13.99,
             "large": 16.99
         }
