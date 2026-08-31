@@ -141,14 +141,23 @@ def add_to_cart():
             'price': pizzas[pizza]['price']
         }
 
-    session['cart'] = cart
-    session.modified = True
+    session['cart'] = cart # update session with the new cart
+    session.modified = True # force flask to save the session data
+    flash(f'Added {quantity} {pizza}(s) added to cart')
+    return redirect(url_for(index))
 
+@app.route("/remove_from_cart/<item>") #
+def remove_from_cart(item):
+    cart = session.get('cart', {})
 
-
-
-
-
+    if item in cart:
+        del cart[item]
+        session['cart'] = cart
+        session.modified = True
+        flash(f'{item} removed from cart.')
+    else:
+        flash(f'{item} not found in cart.')
+    return redirect('/')
 
 
 
