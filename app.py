@@ -164,12 +164,15 @@ def select_addon():
     selected_addons = {}
     _, addons = load_data() # we only need addons
 
-    selected_keys = request
+    selected_keys = request.form.getlist('addons')# get list of selected addons
 
+    for addon in selected_keys:
+        if addon in addons:
+            selected_addons[addon] = float(addons[addon]['price']) # store selected addon and its price
 
-
-
-
+    session['selected_addons'] = selected_addons  # store selected addons in session
+    session.modified = True # force flask to save the session
+    return redirect('/') # redirect to home or any other page where you want to display the selected addons
 
 
 
