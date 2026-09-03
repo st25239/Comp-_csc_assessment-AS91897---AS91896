@@ -1,7 +1,5 @@
 import datetime
 import sqlite3
-
-
 from flask import Flask, app, json, redirect, redirect, render_template, request, session, flash, redirect, url_for
 import json
 app = Flask(__name__)
@@ -112,7 +110,7 @@ def index():
     selected_addons = session.get('selected_addons', {}) # get selected add-ons from session
     pizza, addons = load_data()
     total = calculate_total(cart, selected_addons) #calculate total price based on cart and selected add-ons
-    return render_template('index.html', pizza=pizza, addons=addons, cart=cart, total=total, selected_addons=selected_addons)
+    return render_template('index.html', pizzas=pizza, addons=addons, cart=cart, total=total, selected_addons=selected_addons)
 
 
 @app.route('/about')
@@ -144,7 +142,7 @@ def add_to_cart():
     session['cart'] = cart # update session with the new cart
     session.modified = True # force flask to save the session data
     flash(f'Added {quantity} {pizza}(s) added to cart')
-    return redirect(url_for(index))
+    return redirect(url_for('index'))
 
 @app.route("/remove_from_cart/<item>") #
 def remove_from_cart(item):

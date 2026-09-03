@@ -3,16 +3,7 @@
 {% block title %}Pizza Place{% endblock %}
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Pizza Website made with all the love I can give</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
- <container>
+    <section class="shop-header">
         <header>
             <h1>Welcome to My Pizza Website</h1>
         </header>
@@ -33,26 +24,31 @@
             <section class="grid-panel">
                 <!-- add to cart form -->
                 <article class="panel panel-form">
-                    <from action="{{url_for('add_to_cart')}}" method="post">
-                    <button type="submit">Add to Cart</button>
+                    <form action="{{ url_for('add_to_cart') }}" method="post">
                     <fieldset>
-                        <legend> for="pizza">Choose a Pizza</legend>
+                        <legend>Choose a Pizza</legend>
                         <select name="pizza" id="pizza">
                             {% for pizza,data in pizzas.items() %}
                                 <option value="{{ pizza }}">
-                                    {{ pizza }} - ${{ data['price'] }}
+                                    {{ pizza }} - from ${{ '%.2f'|format(data['sizes']['medium']) }}
                                 </option>
                             {% endfor %}
+                        </select>
+                        <label for="size">Size:</label>
+                        <select name="size" id="size">
+                            <option value="small">Small</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="large">Large</option>
                         </select>
                         <label for="quantity">Quantity:</label>
                         <input type="number" name="quantity" id="quantity" min="1" value="1">
                         <button type="submit">Add to Cart</button>
                     </fieldset>
-                    </from>
+                    </form>
                 </article>
                 
                 <!-- add-ons form-->
-                <form action="{{url_for('select_addons')}}" method="post">
+                <form action="{{url_for('select_addon')}}" method="post">
                     <fieldset>
                         <legend>Choose Add-ons</legend>
                         <!-- Add-on options will be populated here -->
@@ -76,7 +72,7 @@
                                         <strong>{{ item }}</strong> - Quantity: {{ details['quantity'] }} - Price: ${{ details['price'] }}
                                         <span>{{ '%.2f' % details['total'] }} x ${{ '%.2f' % details['price'] }}</span>
                                      </div>
-                                     <a href="{{ url_for('remove_from_cart', item=item) }}" class="remove-button">Remove</a>
+                                     <a href="{{ url_for('remove_from_cart', item=item) }}" class="clear_cart">Remove</a>
                                 </li>
                                 {% endfor %}
                         </ul>
@@ -116,8 +112,6 @@
         <label for="customer_name_checkout">Your Name:</label>
         <input type="text" id="customer_name_checkout" name="customer_name" required>
         <button type="submit">Checkout</button>
-        <button type="submit" formaction="{{ url_for('clear_cart') }}" onclick="return confirm('Are you sure you want to clear the cart?');">Clear Cart</button>
+        <button type="submit" formaction="{{ url_for('cancel_order') }}" onclick="return confirm('Are you sure you want to clear the cart?');">Clear Cart</button>
     </form>
-</body>
-</html>
 {% endblock %}
