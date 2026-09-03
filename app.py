@@ -1,7 +1,7 @@
 import datetime
 import sqlite3
-from flask import Flask, app, json, redirect, redirect, render_template, request, session, flash, redirect, url_for
 import json
+from flask import Flask, flash, redirect, render_template, request, session, url_for
 app = Flask(__name__)
 app.secret_key = 'I_love_my_mom'
 app.secret_key = 'i_love_Liam_Nguyen'
@@ -20,15 +20,14 @@ def initialise_database():
             )
         ''')
         cursor.execute('''
-            CREATE TABLE IF NOT EXISTS orders (
+            CREATE TABLE IF NOT EXISTS pizza_orders (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER,
-                pizza_name TEXT,
-                size TEXT,
-                quantity INTEGER,
-                total_price REAL,
-                order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (user_id) REFERENCES users (id)
+                invoice_number TEXT NOT NULL,
+                customer_name TEXT NOT NULL,
+                cart TEXT NOT NULL,
+                total REAL NOT NULL,
+                addons TEXT,
+                order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         ''')
         conn.commit()
@@ -39,13 +38,13 @@ def load_data():
             pizza = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError) as e:
         print(f"Error loading pizza data: {e}")
-        pizza = []
+        pizza = {}
     try:
         with open('data/addons.json') as f:
             addons = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError) as e:
         print(f"Error loading addons data: {e}")
-        addons = []
+        addons = {}
     return pizza, addons
 
 @app.route('/orders')
@@ -53,19 +52,18 @@ def load_data():
 def order_history():
     with sqlite3.connect('Pizza_Place.db') as conn:
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM orders ORDER BY id DESC')
+        cursor.execute('SELECT * FROM pizza_orders ORDER BY id DESC')
         rows = cursor.fetchall()
         orders = []
         for row in rows:
             orders.append({
                 'id': row[0],
-                'Invoice Number': row[1],
-                'Customer Name': row[2],
-                'size': row[3],
-                'Total': row[4],
-                'addons': row[5],
-                'total_price': row[6],
-                'order_date': row[7]
+                'invoice_number': row[1],
+                'customer_name': row[2],
+                'items': json.loads(row[3]),
+                'total': row[4],
+                'addons': json.loads(row[5] or '{}'),
+                'date': row[6]
             })
     return render_template('order_history.html', orders=orders)
 
@@ -74,7 +72,7 @@ def order_history():
 def cancel_saved_order(order_id):
     with sqlite3.connect('Pizza_Place.db') as conn:
         cursor = conn.cursor()
-        cursor.execute('DELETE FROM orders WHERE id = ?', (order_id,))
+        cursor.execute('DELETE FROM pizza_orders WHERE id = ?', (order_id,))
         conn.commit()
     flash(f'Order {order_id} has been cancelled.')
     return redirect(url_for('order_history'))
@@ -110,7 +108,7 @@ def index():
     selected_addons = session.get('selected_addons', {}) # get selected add-ons from session
     pizza, addons = load_data()
     total = calculate_total(cart, selected_addons) #calculate total price based on cart and selected add-ons
-    return render_template('index.html', pizzas=pizza, addons=addons, cart=cart, total=total, selected_addons=selected_addons)
+    return render_template('index.html', pizzas=pizza, addons=addons, cart=cart, total=total, selected_addons=selected_addons, featured_pizzas=list(pizza.items())[:3])
 
 
 @app.route('/about')
@@ -120,23 +118,30 @@ def about():
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
     pizza = request.form.get('pizza')
-    size = request.form['size']
+    size = request.form.get('size', 'medium')
     pizzas, addons = load_data()  # Load pizza and addons data
-    quantity = int(request.form['quantity'])
-    price = float(request.form['price'])
+    try:
+        quantity = int(request.form.get('quantity', 1))
+    except ValueError:
+        quantity = 0
     cart = session.get('cart', {})
 
-    if pizza not in pizza:
+    if pizza not in pizzas:
         flash(f"{pizza} is not available.")
         return redirect(url_for('index')) # redirect to the index page if the pizza is not available    
 
-    if pizza in cart:
+    prices = pizzas[pizza].get('sizes', {})
+    if size not in prices or quantity < 1:
+        flash('Please choose a valid size and quantity.')
+        return redirect(url_for('index'))
+
+    if pizza in cart and cart[pizza]['size'] == size:
         cart[pizza]['quantity'] += quantity
     else:
         cart[pizza] = {
             'quantity': quantity, # store the quantity of the pizza in the cart
             'size': size,
-            'price': pizzas[pizza]['price']
+            'price': float(prices[size])
         }
 
     session['cart'] = cart # update session with the new cart
@@ -188,9 +193,9 @@ def checkout():
     with sqlite3.connect('Pizza_Place.db') as conn:
         cursor = conn.cursor()
         cursor.execute('''
-            INSERT INTO orders (invoice_number, customer_name, size, cart, total, addons, order_date)
+            INSERT INTO pizza_orders (invoice_number, customer_name, cart, total, addons, order_date)
             VALUES (?, ?, ?, ?, ?, ?, ?)
-        ''', (invoice_number, customer_name, json.dumps(cart), total, json.dumps(selected_addons), total))
+        ''', (invoice_number, customer_name, json.dumps(cart), total, json.dumps(selected_addons), invoice_date))
         conn.commit()
 
             # make invoice file

@@ -30,8 +30,8 @@
                         </td>
                         <td>
                             <ul>
-                                {% for addon in order['addons'].items() %}
-                                    <li>{{ addon.name }} - Quantity: {{ addon.quantity }} - Price: ${{ "%.2f"|format(addon.price) }}</li>
+                                {% for addon, price in order['addons'].items() %}
+                                    <li>{{ addon }} - ${{ "%.2f"|format(price) }}</li>
                                 {% endfor %}
                             </ul>
                         </td>

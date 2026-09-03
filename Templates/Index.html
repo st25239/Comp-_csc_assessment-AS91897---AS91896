@@ -12,11 +12,11 @@
         {% for pizza, details in featured_pizzas %}
         <div id="featured-pizzas-items">
             <label>{{ pizza.replace('-', ' ')|title }}</label>
-            <img src="{{ url_for('static', filename=details['img_path']) }}">
+            <img src="{{ url_for('static', filename=details['img_path'].replace('static/', '')) }}" alt="{{ pizza }} pizza">
         </div>
         {% endfor %}
     </div>
-</container>
+    </section>
 
 
     <main class="page-shell">
@@ -70,7 +70,7 @@
                                 <li>
                                     <div>
                                         <strong>{{ item }}</strong> - Quantity: {{ details['quantity'] }} - Price: ${{ details['price'] }}
-                                        <span>{{ '%.2f' % details['total'] }} x ${{ '%.2f' % details['price'] }}</span>
+                                        <span>${{ '%.2f' % (details['quantity'] * details['price']) }}</span>
                                      </div>
                                      <a href="{{ url_for('remove_from_cart', item=item) }}" class="clear_cart">Remove</a>
                                 </li>
