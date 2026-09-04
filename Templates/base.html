@@ -2,13 +2,17 @@
 <html lang="en">
 <head>
     <title>{% block title %}Pizza Place{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <h1>Pizza Place</h1>
     <nav>
         <ul>
-            <li><a href="{{ url_for('index') }}">Home</a></li>
-            <li><a href="{{ url_for('order_history') }}">View Cart</a></li>
+            <li><a href="{{ url_for('index') }}">Order</a></li>
+            <li><a href="{{ url_for('view_cart') }}">View Cart</a></li>
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('order_history') }}">Order History</a></li>
         </ul>
     </nav>
     <header>

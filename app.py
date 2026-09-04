@@ -50,7 +50,8 @@ def load_data():
 @app.route('/orders')
 # the code that displays the order history page and retrieves the order data from the database.
 def order_history():
-    with sqlite3.connect('Pizza_Place.db') as conn:
+    initialise_database()
+    with sqlite3.connect('database.db') as conn:
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM pizza_orders ORDER BY id DESC')
         rows = cursor.fetchall()
@@ -70,7 +71,8 @@ def order_history():
 @app.route('/cancel_saved_order/<int:order_id>', methods=['POST'])
 # the code that cancels a saved order from the order history page and removes it from the database.
 def cancel_saved_order(order_id):
-    with sqlite3.connect('Pizza_Place.db') as conn:
+    initialise_database()
+    with sqlite3.connect('database.db') as conn:
         cursor = conn.cursor()
         cursor.execute('DELETE FROM pizza_orders WHERE id = ?', (order_id,))
         conn.commit()
@@ -108,7 +110,7 @@ def index():
     selected_addons = session.get('selected_addons', {}) # get selected add-ons from session
     pizza, addons = load_data()
     total = calculate_total(cart, selected_addons) #calculate total price based on cart and selected add-ons
-    return render_template('index.html', pizzas=pizza, addons=addons, cart=cart, total=total, selected_addons=selected_addons, featured_pizzas=list(pizza.items())[:3])
+    return render_template('index.html', pizzas=pizza, addons=addons, cart=cart, total=total, selected_addons=selected_addons, featured_pizzas=list(pizza.items()))
 
 
 @app.route('/about')
@@ -167,7 +169,7 @@ def select_addon():
     selected_addons = {}
     _, addons = load_data() # we only need addons
 
-    selected_keys = request.form.getlist('addons')# get list of selected addons
+    selected_keys = request.form.getlist('addons')# get     featured_pizzas=    featured_pizzas=list(pizza.items())[:3] of selected addons
 
     for addon in selected_keys:
         if addon in addons:
@@ -190,11 +192,12 @@ def checkout():
     invoice_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
     invoice_number = f"INV-{customer_name.replace(' ', '_')}_{invoice_date}"
 
-    with sqlite3.connect('Pizza_Place.db') as conn:
+    initialise_database()
+    with sqlite3.connect('database.db') as conn:
         cursor = conn.cursor()
         cursor.execute('''
             INSERT INTO pizza_orders (invoice_number, customer_name, cart, total, addons, order_date)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?)
         ''', (invoice_number, customer_name, json.dumps(cart), total, json.dumps(selected_addons), invoice_date))
         conn.commit()
 
