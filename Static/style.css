@@ -213,4 +213,99 @@ button:hover {
   list-style: none;
 }
 
+.cart-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+}
 
+.cart-list span {
+  display: block;
+  color: var(--tomato-dark);
+  font-weight: bold;
+}
+
+.clear_cart {
+  flex: 0 0 auto;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 2px solid var(--gold);
+  font-size: 1.2rem;
+}
+
+.flashes {
+  margin: 12px 0;
+  padding: 12px 18px;
+  border-left: 4px solid var(--gold);
+  background: #fff0c9;
+  list-style: none;
+}
+
+main + form {
+  width: min(1180px, calc(100% - 32px));
+  margin: 12px auto 42px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  box-shadow: var(--shadow);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--paper);
+  box-shadow: var(--shadow);
+}
+
+th,
+td {
+  padding: 12px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  color: white;
+  background: var(--tomato-dark);
+}
+
+td ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+footer {
+  padding: 26px 16px;
+  color: var(--muted);
+  text-align: center;
+}
+
+@media (max-width: 720px) {
+  nav ul {
+    justify-content: center;
+  }
+
+  .featured-pizzas,
+  .grid-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-summary {
+    grid-column: auto;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
