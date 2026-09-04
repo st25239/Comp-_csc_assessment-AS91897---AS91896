@@ -65,3 +65,83 @@ main {
   margin: 0 auto;
 }
 
+.shop-header {
+  padding: 42px 16px 30px;
+  background: linear-gradient(135deg, #fff8ed 0%, #fbe8c7 100%);
+  text-align: center;
+}
+
+.shop-header h1 {
+  margin: 0 0 28px;
+  color: var(--tomato-dark);
+  font-size: clamp(2rem, 5vw, 3.8rem);
+}
+
+.featured-pizzas {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+#featured-pizzas-items {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 240px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  box-shadow: var(--shadow);
+}
+
+#featured-pizzas-items label {
+  padding: 14px 12px 4px;
+  color: var(--tomato-dark);
+  font-size: 1.15rem;
+  font-weight: bold;
+}
+
+#featured-pizzas-items img {
+  display: block;
+  width: 100%;
+  height: 190px;
+  object-fit: cover;
+}
+
+.grid-panel {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  padding: 34px 0 20px;
+}
+
+.panel,
+.grid-panel > form {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  box-shadow: var(--shadow);
+}
+
+.panel-form,
+.grid-panel > form {
+  padding: 22px;
+}
+
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+legend,
+.panel-summary h2 {
+  color: var(--tomato-dark);
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+
