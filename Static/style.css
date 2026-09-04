@@ -144,4 +144,73 @@ legend,
   font-weight: bold;
 }
 
+label,
+select,
+input,
+button {
+  display: block;
+  width: 100%;
+}
+
+label {
+  margin: 13px 0 5px;
+  font-weight: bold;
+}
+
+select,
+input[type='number'],
+input[type='text'] {
+  min-height: 42px;
+  padding: 8px 10px;
+  border: 1px solid #cdb9a5;
+  border-radius: 4px;
+  color: var(--ink);
+  background: #fffdf9;
+  font: inherit;
+}
+
+button {
+  min-height: 44px;
+  margin-top: 18px;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 4px;
+  color: white;
+  background: var(--tomato);
+  cursor: pointer;
+  font: bold 1rem Georgia, 'Times New Roman', serif;
+}
+
+button:hover {
+  background: var(--tomato-dark);
+}
+
+.grid-panel > form label {
+  margin: 10px 0;
+  font-weight: normal;
+}
+
+.grid-panel > form input[type='checkbox'] {
+  display: inline-block;
+  width: auto;
+  margin-right: 8px;
+  accent-color: var(--tomato);
+}
+
+.panel-summary {
+  grid-column: 1 / -1;
+  padding: 22px;
+}
+
+.panel-summary h2 {
+  margin-top: 0;
+}
+
+.cart-list,
+.panel-summary ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 
