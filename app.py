@@ -113,6 +113,19 @@ def index():
     return render_template('index.html', pizzas=pizza, addons=addons, cart=cart, total=total, selected_addons=selected_addons, featured_pizzas=list(pizza.items()))
 
 
+@app.route('/home')
+def home():
+    return redirect(url_for('index'))
+
+
+@app.route('/view_cart')
+def view_cart():
+    cart = session.get('cart', {})
+    selected_addons = session.get('selected_addons', {})
+    total = calculate_total(cart, selected_addons)
+    return render_template('cart.html', cart=cart, selected_addons=selected_addons, total=total)
+
+
 @app.route('/about')
 def about():
     return render_template('about.html')

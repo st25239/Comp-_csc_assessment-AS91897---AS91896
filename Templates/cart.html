@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}View Cart{% endblock %}
+
+{% block content %}
+    <section class="cart-page">
+        <h2>Your Cart</h2>
+
+        {% if cart %}
+            <ul class="cart-list">
+                {% for item, details in cart.items() %}
+                    <li>
+                        <div>
+                            <strong>{{ item }}</strong> - Size: {{ details['size']|title }} - Quantity: {{ details['quantity'] }}
+                            <span>${{ '%.2f' % (details['quantity'] * details['price']) }}</span>
+                        </div>
+                        <a href="{{ url_for('remove_from_cart', item=item) }}" class="clear_cart">Remove</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="empty-cart">Your cart is empty.</p>
+        {% endif %}
+
+        <h3>Add-ons</h3>
+        {% if selected_addons %}
+            <ul>
+                {% for item, details in selected_addons.items() %}
+                    <li>{{ item }}: ${{ '%.2f' % details }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="empty-cart">No add-ons selected.</p>
+        {% endif %}
+
+        <div class="total-row">
+            <span>Total</span>
+            <strong>Total: ${{ '%.2f' % total }}</strong>
+        </div>
+
+        <div class="cart-actions">
+            <a href="{{ url_for('index') }}" class="button-link">Continue Shopping</a>
+            <form action="{{ url_for('checkout') }}" method="post" style="display:inline;">
+                <label for="customer_name_checkout">Your Name:</label>
+                <input type="text" id="customer_name_checkout" name="customer_name" required>
+                <button type="submit">Checkout</button>
+            </form>
+        </div>
+    </section>
+{% endblock %}
