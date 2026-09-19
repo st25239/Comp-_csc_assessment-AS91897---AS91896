@@ -40,9 +40,25 @@
 
         <div class="cart-actions">
             <a href="{{ url_for('index') }}" class="button-link">Continue Shopping</a>
-            <form action="{{ url_for('checkout') }}" method="post" style="display:inline;">
+            <form action="{{ url_for('checkout') }}" method="post" class="checkout-form">
                 <label for="customer_name_checkout">Your Name:</label>
                 <input type="text" id="customer_name_checkout" name="customer_name" required>
+
+                <label for="customer_email_checkout">Email:</label>
+                <input type="email" id="customer_email_checkout" name="customer_email" placeholder="you@example.com" required>
+
+                <label for="customer_address_checkout">Delivery Address:</label>
+                <textarea id="customer_address_checkout" name="customer_address" rows="3" placeholder="Street, suburb, city" required></textarea>
+
+                <label for="card_name_checkout">Name on Card:</label>
+                <input type="text" id="card_name_checkout" name="card_name" placeholder="John Smith" required>
+
+                <label for="card_number_checkout">Card Number:</label>
+                <input type="text" id="card_number_checkout" name="card_number" inputmode="numeric" maxlength="19" placeholder="1234 5678 9012 3456" required>
+
+                <label for="card_expiry_checkout">Expiry Date:</label>
+                <input type="text" id="card_expiry_checkout" name="card_expiry" placeholder="MM/YY" required>
+
                 <button type="submit">Checkout</button>
             </form>
         </div>

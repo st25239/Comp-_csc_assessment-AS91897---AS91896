@@ -24,6 +24,11 @@ def initialise_database():
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 invoice_number TEXT NOT NULL,
                 customer_name TEXT NOT NULL,
+                email TEXT,
+                address TEXT,
+                card_name TEXT,
+                card_number TEXT,
+                card_expiry TEXT,
                 cart TEXT NOT NULL,
                 total REAL NOT NULL,
                 addons TEXT,
@@ -53,7 +58,12 @@ def order_history():
     initialise_database()
     with sqlite3.connect('database.db') as conn:
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM pizza_orders ORDER BY id DESC')
+        cursor.execute('''
+            SELECT id, invoice_number, customer_name, email, address, card_name, card_number, card_expiry,
+                   cart, total, addons, order_date
+            FROM pizza_orders
+            ORDER BY id DESC
+        ''')
         rows = cursor.fetchall()
         orders = []
         for row in rows:
@@ -61,10 +71,12 @@ def order_history():
                 'id': row[0],
                 'invoice_number': row[1],
                 'customer_name': row[2],
-                'items': json.loads(row[3]),
-                'total': row[4],
-                'addons': json.loads(row[5] or '{}'),
-                'date': row[6]
+                'email': row[3],
+                'address': row[4],
+                'items': json.loads(row[8]),
+                'total': row[9],
+                'addons': json.loads(row[10] or '{}'),
+                'date': row[11]
             })
     return render_template('order_history.html', orders=orders)
 
@@ -198,62 +210,89 @@ def select_addon():
 
 @app.route('/checkout', methods=['POST'])
 def checkout():
-    customer_name = request.form['customer_name'].strip().title()
+    customer_name = request.form.get('customer_name', '').strip().title()
+    customer_email = request.form.get('customer_email', '').strip()
+    customer_address = request.form.get('customer_address', '').strip()
+    card_name = request.form.get('card_name', '').strip().title()
+    card_number = request.form.get('card_number', '').strip().replace(' ', '')
+    card_expiry = request.form.get('card_expiry', '').strip()
+
     cart = session.get('cart', {})
     selected_addons = session.get('selected_addons', {})
     total = calculate_total(cart, selected_addons)
     invoice_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
     invoice_number = f"INV-{customer_name.replace(' ', '_')}_{invoice_date}"
 
+    masked_card = f"•••• •••• •••• {card_number[-4:]}" if card_number and card_number.isdigit() and len(card_number) >= 4 else 'Not provided'
+
     initialise_database()
     with sqlite3.connect('database.db') as conn:
         cursor = conn.cursor()
         cursor.execute('''
-            INSERT INTO pizza_orders (invoice_number, customer_name, cart, total, addons, order_date)
-            VALUES (?, ?, ?, ?, ?, ?)
-        ''', (invoice_number, customer_name, json.dumps(cart), total, json.dumps(selected_addons), invoice_date))
+            INSERT INTO pizza_orders (invoice_number, customer_name, email, address, card_name, card_number, card_expiry, cart, total, addons, order_date)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (
+            invoice_number,
+            customer_name,
+            customer_email,
+            customer_address,
+            card_name,
+            masked_card,
+            card_expiry,
+            json.dumps(cart),
+            total,
+            json.dumps(selected_addons),
+            invoice_date
+        ))
         conn.commit()
 
-            # make invoice file
     invoice_filename = f"invoice_{invoice_number}.txt"
 
     try:
-            with open(invoice_filename, 'w') as f:
-                f.write(f"Invoice Number: {invoice_number}\n")
-                f.write(f"Customer Name: {customer_name}\n")
-                f.write(f"Date: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}\n")
-                f.write("Items:\n")
-                for item, details in cart.items():
-                    f.write(f"- {item} (Size: {details['size']}, Quantity: {details['quantity']}, Price: ${details['price']:.2f})\n")
-                if selected_addons:
-                    f.write("Add-ons:\n")
-                    for addon, price in selected_addons.items():
-                        f.write(f"- {addon}: ${price:.2f}\n")
-                f.write(f"Total: ${total:.2f}\n")
+        with open(invoice_filename, 'w') as f:
+            f.write(f"Invoice Number: {invoice_number}\n")
+            f.write(f"Customer Name: {customer_name}\n")
+            f.write(f"Email: {customer_email}\n")
+            f.write(f"Address: {customer_address}\n")
+            f.write(f"Payment: {card_name} - {masked_card}\n")
+            f.write(f"Date: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}\n")
+            f.write("Items:\n")
+            for item, details in cart.items():
+                f.write(f"- {item} (Size: {details['size']}, Quantity: {details['quantity']}, Price: ${details['price']:.2f})\n")
+            if selected_addons:
+                f.write("Add-ons:\n")
+                for addon, price in selected_addons.items():
+                    f.write(f"- {addon}: ${price:.2f}\n")
+            f.write(f"Total: ${total:.2f}\n")
     except Exception as e:
-            flash(f"could not create invoice file")
-            print(f"Error creating invoice file: {e}")
+        flash("could not create invoice file")
+        print(f"Error creating invoice file: {e}")
 
     try:
         if not customer_name:
             flash("please enter your name before proceeding to checkout.")
-            return redirect(url_for('index')) # redirect to the index page if the customer name is empty
+            return redirect(url_for('index'))
+
+        if not customer_email:
+            flash("Please enter your email before checkout.")
+            return redirect(url_for('view_cart'))
+
+        if not customer_address:
+            flash("Please enter your delivery address before checkout.")
+            return redirect(url_for('view_cart'))
 
         if not cart:
             flash("Your cart is empty. Please add items to your cart before proceeding to checkout.")
-            return redirect(url_for('index')) # redirect to the index page if the cart is empty
-
-        with open('data/pizza.json', 'w') as f: 
-            json.dump(pizza_data, f) 
+            return redirect(url_for('index'))
 
         with open('data/pizza.json', 'r') as file:
-            pizza_data = json.load(file) # load the pizza data from the JSON file
+            pizza_data = json.load(file)
 
         for pizza_name, details in cart.items():
             if pizza_name in pizza_data:
                 pizza_data[pizza_name]['stock'] -= details['quantity']
                 if pizza_data[pizza_name]['stock'] < 0:
-                    pizza_data[pizza_name]['stock'] = 0 # prevent negative stock values
+                    pizza_data[pizza_name]['stock'] = 0
 
         with open('data/pizza.json', 'w') as file:
             json.dump(pizza_data, file, indent=4)
@@ -262,14 +301,23 @@ def checkout():
         flash(f"An error occurred while updating the stock: {e}")
         return redirect(url_for('index'))
 
-    
-
-    # this resets the cart after purchase
     session.pop('cart', None)
     session.pop('selected_addons', None)
     session.modified = True
 
-    return render_template('invoice.html', customer_name=customer_name, cart=cart, total=total, selected_addons=selected_addons, invoice_number=invoice_number, invoice_date=invoice_date)
+    return render_template(
+        'invoice.html',
+        customer_name=customer_name,
+        customer_email=customer_email,
+        customer_address=customer_address,
+        cart=cart,
+        total=total,
+        selected_addons=selected_addons,
+        invoice_number=invoice_number,
+        invoice_date=invoice_date,
+        masked_card=masked_card,
+        card_name=card_name
+    )
 
 
 if __name__ == '__main__':
