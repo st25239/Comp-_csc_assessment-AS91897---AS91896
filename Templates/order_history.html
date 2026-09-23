@@ -4,16 +4,19 @@
 </header>
 {% block content %}
     <h2>Order History</h2>
+
     {% if orders %}
-       <table>
+        <table>
             <thead>
                 <tr>
                     <th>Invoice Number</th>
                     <th>Customer Name</th>
+                    <th>Address</th>
+                    <th>Email</th>
                     <th>Items</th>
                     <th>Add-ons</th>
                     <th>Total</th>
-                    <th>Dates</th>
+                    <th>Date</th>
                 </tr>
             </thead>
             <tbody>
@@ -21,35 +24,38 @@
                     <tr>
                         <td>{{ order['invoice_number'] }}</td>
                         <td>{{ order['customer_name'] }}</td>
+                        <td>{{ order['address'] }}</td>
+                        <td>{{ order['email'] }}</td>
+                      
+
                         <td>
                             <ul>
                                 {% for item, details in order['items'].items() %}
-                                    <li>{{ item }} - Quantity: {{ details ['quantity'] }},  Price: ${{ "%.2f"|format(details['price']) }}</li>
+                                    <li>{{ item }} - Quantity: {{ details['quantity'] }}, Price: ${{ "%.2f"|format(details['price']) }}</li>
+                                {% else %}
+                                    <li>No items</li>
                                 {% endfor %}
                             </ul>
                         </td>
+
                         <td>
-                            <ul>
-                                {% for addon, price in order['addons'].items() %}
-                                    <li>{{ addon }} - ${{ "%.2f"|format(price) }}</li>
-                                {% endfor %}
-                            </ul>
+                            {% if order['addons'] %}
+                                <ul>
+                                    {% for addon, price in order['addons'].items() %}
+                                        <li>{{ addon }} - ${{ "%.2f"|format(price) }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <span>None</span>
+                            {% endif %}
                         </td>
+
                         <td>${{ "%.2f"|format(order['total']) }}</td>
                         <td>{{ order['date'] }}</td>
 
-                        <form action="{{ url_for('cancel_saved_order', order_id=order['id']) }}" method="post" style="display:inline;">
-                            <button type="submit" onsubmit="return confirm('Are you sure you want to cancel this order?');">Delete</button>
-                            <button type="submit">Delete</button>
-                        </form>
+                       
                     </td>
-                    <td>
-                        <ul>
-                            {% for item, details in order['items'].items() %}
-                                <li>{{ item }} - Quantity: {{ details['quantity'] }}, Price: ${{ "%.2f"|format(details['price']) }}</li>
-                            {% endfor %}
-                        </ul>
-                    </td>
+                   
                     <td>
                         <ul>
                             {% for addon in order['addons'].items() %}
@@ -57,7 +63,7 @@
                             {% endfor %}
                         </ul>
                     </td>
-                    <td>${{ "%.2f"|format(order['total']) }}</td>
+                    
                     <td>
                         <form action="{{ url_for('cancel_saved_order', order_id=order['id']) }}" method="post" style="display:inline;">
                             <button type="submit" onclick="return confirm('Are you sure you want to cancel this order?');">Delete</button>
@@ -66,8 +72,8 @@
                  </tr>
                 {% endfor %}
             </tbody>
-       </table>
+        </table>
     {% else %}
-    <p>No orders found.</p>
+        <p>No orders found.</p>
     {% endif %}
 {% endblock %}

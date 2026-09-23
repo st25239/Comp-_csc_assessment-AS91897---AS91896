@@ -41,6 +41,7 @@
         <div class="cart-actions">
             <a href="{{ url_for('index') }}" class="button-link">Continue Shopping</a>
             <form action="{{ url_for('checkout') }}" method="post" class="checkout-form">
+                
                 <label for="customer_name_checkout">Your Name:</label>
                 <input type="text" id="customer_name_checkout" name="customer_name" required>
 

@@ -270,17 +270,19 @@ def checkout():
 
     try:
         if not customer_name:
-            flash("please enter your name before proceeding to checkout.")
-            return redirect(url_for('index'))
-
-        if not customer_email:
-            flash("Please enter your email before checkout.")
+            flash("Please enter your name before checkout.")
             return redirect(url_for('view_cart'))
+
 
         if not customer_address:
-            flash("Please enter your delivery address before checkout.")
+            flash("Please enter your address before checkout.")
             return redirect(url_for('view_cart'))
 
+
+        if not card_name:
+            flash("Please enter the name on your card before checkout.")
+            return redirect(url_for('view_cart'))
+        
         if not cart:
             flash("Your cart is empty. Please add items to your cart before proceeding to checkout.")
             return redirect(url_for('index'))
