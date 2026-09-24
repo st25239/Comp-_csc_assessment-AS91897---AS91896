@@ -1,6 +1,7 @@
 {
     "Margherita": {
         "img_path": "static/images/margherita.png",
+        "discription": "A classic pizza with tomato sauce, mozzarella cheese, and fresh basil.",
         "sizes": {
             "small": 11.99,
             "medium": 13.99,
@@ -10,8 +11,9 @@
 },
 "garlic": {
     "img_path": "static/images/Garlic.png",
+    "discription": "A delicious pizza with garlic and other tasty ingredients.",
     "sizes": {
-        "small": 10.99,
+        "small": 11.99,
         "medium": 13.99,
         "large": 16.99
     }
@@ -19,6 +21,7 @@
 
 "Pepperoni": {
     "img_path": "static/images/Pepperoni.png",
+    "discription": "A pizza topped with spicy pepperoni slices.",
     "sizes": {
         "small": 12.99,
         "medium": 15.99,
@@ -27,6 +30,7 @@
 },
 "Veggie Boomerang": {
     "img_path": "static/images/Veggie_Boomerang.png",
+    "discription": "A vegetarian pizza with a variety of fresh vegetables, and a delicious sauce made to look like a boomerang.",
     "sizes": {
         "small": 9.99,
         "medium": 12.99,
@@ -35,6 +39,7 @@
 },
 "BBQ chicken": {
     "img_path": "static/images/BBQ_Chicken.png",
+    "discription": "A delicious pizza with BBQ sauce and grilled chicken that is made to melt in your mouth.",
     "sizes": {
         "small": 14.99,
         "medium": 17.99,
@@ -43,6 +48,7 @@
 },
 "Meat lovers": {
     "img_path": "static/images/Meat_Lovers.png",
+    "discription": "A pizza loaded with a variety of meats, including pepperoni, sausage, and bacon and is made to satisfy any meat lover's cravings.",
     "sizes": {
         "small": 14.99,
         "medium": 17.99,
@@ -51,6 +57,7 @@
 },
 "Butter Chicken": {
     "img_path": "static/images/Butter_Chicken.png",
+    "discription": "A creamy pizza with butter chicken and a blend of aromatic spices. along with the perfect combination of cheese and sauce, this pizza is a must-try for anyone who loves Indian cuisine.",
     "sizes": {
         "small": 14.99,
         "medium": 17.99,
@@ -59,6 +66,7 @@
 },
 "Meat Boomerang": {
     "img_path": "static/images/Meat_Boomerang.png",
+    "discription": "A pizza loaded with a variety of meats, including pepperoni, sausage, and bacon, and is made to satisfy any meat lover's cravings. along with the meat is a boomerang of sause that coats the pizza.",
     "sizes": {
         "small": 14.99,
         "medium": 17.99,
@@ -67,6 +75,7 @@
 },
 "Chicken Peri Peri": {
     "img_path": "static/images/Chicken_Peri_Peri.png",
+    "discription": "A spicy pizza with chicken marinated in peri peri sauce, and is made to satisfy any spice lover's cravings.",
     "sizes": {
         "small": 14.99,
         "medium": 17.99,
@@ -75,6 +84,7 @@
 },
 "Prawn Boomerang": {
     "img_path": "static/images/Prawn_Boomerang.png",
+    "discription": "A pizza loaded with a variety of prawns, and is made to satisfy any seafood lover's cravings. along with the prawns is a boomerang of sause that coats the pizza.",
     "sizes": {
         "small": 14.99,
         "medium": 17.99,

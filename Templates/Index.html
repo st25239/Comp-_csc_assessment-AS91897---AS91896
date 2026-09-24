@@ -22,19 +22,22 @@
                 <article class="panel panel-form">
                     <form action="{{ url_for('add_to_cart') }}" method="post">
                     <fieldset>
-                        <legend>Choose a Pizza</legend>
-                        <select name="pizza" id="pizza" onchange="updatePrices()">
-                                {% for pizza, data in pizzas.items() %}
-                                 <option value="{{ pizza }}">
-                                    {{ pizza.replace('-', ' ')|title }}
-                                </option>
-                            {% endfor %}
+                    <legend>Choose a Pizza</legend>
+                       <select name="pizza" id="pizza" onchange="updatePrices()">
+                            {% for pizza, data in pizzas.items() %}
+                                <option value="{{ pizza }}" 
+                                    data-small="{{ data['sizes']['small'] }}" 
+                                    data-medium="{{ data['sizes']['medium'] }}" 
+                                    data-large="{{ data['sizes']['large'] }}">
+                                {{ pizza.replace('-', ' ')|title }}
+                             </option>
+                        {% endfor %}
                         </select>
                         <label for="size">Size:</label>
                         <select name="size" id="size">
-                            <option value="small" id="size-small">Small </option>
-                            <option value="medium" id="size-medium">Medium </option>
-                            <option value="large" id="size-large">Large </option>
+                            <option value="small" id="size-small">Small</option>
+                            <option value="medium" id="size-medium">Medium</option>
+                            <option value="large" id="size-large">Large</option>
                         </select>
                         <label for="quantity">Quantity:</label>
                         <input type="number" name="quantity" id="quantity" min="1" value="1">
