@@ -8,6 +8,7 @@ app.secret_key = 'i_love_Liam_Nguyen'
 app.secret_key = 'i_love_Lucas_Smith'
 app.secret_key = 'i_love_Leo_Chen'
 
+
 def initialise_database():
     with sqlite3.connect('database.db') as conn:
         cursor = conn.cursor()
@@ -37,6 +38,7 @@ def initialise_database():
         ''')
         conn.commit()
 
+
 def load_data():
     try:
         with open('data/pizza.json') as f:
@@ -51,6 +53,7 @@ def load_data():
         print(f"Error loading addons data: {e}")
         addons = {}
     return pizza, addons
+
 
 @app.route('/orders')
 # the code that displays the order history page and retrieves the order data from the database.
@@ -80,6 +83,7 @@ def order_history():
             })
     return render_template('order_history.html', orders=orders)
 
+
 @app.route('/cancel_saved_order/<int:order_id>', methods=['POST'])
 # the code that cancels a saved order from the order history page and removes it from the database.
 def cancel_saved_order(order_id):
@@ -90,6 +94,7 @@ def cancel_saved_order(order_id):
         conn.commit()
     flash(f'Order {order_id} has been cancelled.')
     return redirect(url_for('order_history'))
+
 
 @app.route('/calculate_total')
 # the code that calculates the total price of the order based on the selected pizza, size, quantity, and any selected add-ons.
@@ -108,6 +113,7 @@ def calculate_total(cart, selected_addons):
 
     return total
 
+
 @app.route('/cancel_order', methods=['POST'])
 def cancel_order():
     session.pop('cart', None)
@@ -115,6 +121,7 @@ def cancel_order():
     flash('Your order has been cancelled.')
     session.modified = True 
     return redirect(url_for('index'))
+
 
 @app.route('/')
 def index():
@@ -141,6 +148,7 @@ def view_cart():
 @app.route('/about')
 def about():
     return render_template('about.html')
+
 
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
@@ -176,6 +184,7 @@ def add_to_cart():
     flash(f'Added {quantity} {pizza}(s) added to cart')
     return redirect(url_for('index'))
 
+
 @app.route("/remove_from_cart/<item>") #
 def remove_from_cart(item):
     cart = session.get('cart', {})
@@ -188,6 +197,7 @@ def remove_from_cart(item):
     else:
         flash(f'{item} not found in cart.')
     return redirect('/')
+
 
 @app.route ('/selection_addon',methods=['POST'])
 def select_addon():
@@ -203,9 +213,6 @@ def select_addon():
     session['selected_addons'] = selected_addons  # store selected addons in session
     session.modified = True # force flask to save the session
     return redirect('/') # redirect to home or any other page where you want to display the selected addons
-
-
-
 
 
 @app.route('/checkout', methods=['POST'])
@@ -273,11 +280,9 @@ def checkout():
             flash("Please enter your name before checkout.")
             return redirect(url_for('view_cart'))
 
-
         if not customer_address:
             flash("Please enter your address before checkout.")
             return redirect(url_for('view_cart'))
-
 
         if not card_name:
             flash("Please enter the name on your card before checkout.")
@@ -324,4 +329,4 @@ def checkout():
 
 if __name__ == '__main__':
     initialise_database()
-    app.run(debug=True )
+    app.run(debug=True)

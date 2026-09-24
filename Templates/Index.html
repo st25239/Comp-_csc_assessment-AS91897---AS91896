@@ -111,4 +111,25 @@
         <button type="submit">Checkout</button>
         <button type="submit" formaction="{{ url_for('cancel_order') }}" onclick="return confirm('Are you sure you want to clear the cart?');">Clear Cart</button>
     </form>
+    <script>
+        function updatePrices() {
+            const pizzaSelect = document.getElementById("pizza");
+            const selectedPizza = pizzaSelect.options[pizzaSelect.selectedIndex];
+
+            const smallPrice = selectedPizza.dataset.small;
+            const mediumPrice = selectedPizza.dataset.medium;
+            const largePrice = selectedPizza.dataset.large;
+
+            document.getElementById("size-small").textContent =
+                "Small - $" + smallPrice;
+
+            document.getElementById("size-medium").textContent =
+                "Medium - $" + mediumPrice;
+
+            document.getElementById("size-large").textContent =
+                "Large - $" + largePrice;
+
+            updatePrices();
+        }
+    </script>
 {% endblock %}
