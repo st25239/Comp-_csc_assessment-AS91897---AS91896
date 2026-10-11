@@ -84,6 +84,16 @@ def order_history():
     return render_template('order_history.html', orders=orders)
 
 
+@app.route('/pizza/<pizza_name>')
+def pizza(pizza_name):
+    pizza, addons = load_data()
+    if pizza_name in pizza:
+        return render_template('pizza.html', pizza_name=pizza_name, details=pizza[pizza_name])
+    else:
+        flash('Pizza not found.')
+        return redirect(url_for('index'))
+
+
 @app.route('/cancel_saved_order/<int:order_id>', methods=['POST'])
 # the code that cancels a saved order from the order history page and removes it from the database.
 def cancel_saved_order(order_id):
@@ -103,7 +113,7 @@ def calculate_total(cart, selected_addons):
     total += sum(price for price in selected_addons.values())
     discount_applied = False
     total = sum(details['quantity'] * details['price'] for details in cart.values())
-    
+
     if total > 100 and not discount_applied:
         discount = total * 0.10  # Calculate the discount amount
         total -= discount  # Apply the discount
@@ -185,7 +195,7 @@ def add_to_cart():
     return redirect(url_for('index'))
 
 
-@app.route("/remove_from_cart/<item>") #
+@app.route("/remove_from_cart/<item>")
 def remove_from_cart(item):
     cart = session.get('cart', {})
 

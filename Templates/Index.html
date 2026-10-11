@@ -7,9 +7,10 @@
         <div class="featured-pizzas">
             {% for pizza, details in featured_pizzas %}
                 <div id="featured-pizzas-items">
-                    <label>{{ pizza.replace('-', ' ')|title }}</label>
-                    <img src="{{ details['img_path'] }}">
-                    
+                    <a href="{{ url_for('pizza', pizza_name=pizza) }}">
+                        <label>{{ pizza.replace('-', ' ')|title }}</label>
+                        <img src="{{ details['img_path'] }}">
+                    </a>
                 </div>
             {% endfor %}
             </div>

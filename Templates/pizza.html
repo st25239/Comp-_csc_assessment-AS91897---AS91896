@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Pizza Place{% endblock %}
+
+{% block content %}
+<div class="pizza-page-main">
+    <div class="pizza-storage">
+        <img src="{{ url_for('static', filename=details['img_path']) }}">
+    </div>
+    <div class="pizza-infomation-and-form">
+        <div class="pizza-infomation">
+            <h1 name="pizza" id="pizza">{{ pizza_name.replace("-", " ")|title }}</h1>
+            <h2>From ${{ (details['sizes'] | dictsort(false, 'value'))[0][1] }}</h2>
+            <p>{{ details['description'] }}</p>
+        </div>
+        <form action="{{ url_for('add_to_cart' )}}" method="POST">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class="flash-messages">
+        {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+  {% endwith %}
+
+        <div class="pizza-form">
+            <label for="size">Size:</label>
+            <select name="size" id="size">
+                {% for size, price in details['sizes'].items() %}
+                    <option value="{{ size }}">{{ size.title() }} - ${{ price }}</option>
+                {% endfor %}
+            </select>
+
+            
+        
+            <label for="quantity">Quantity:</label>
+            <input type="number" name="quantity" id="quantity" min="1" value="1">
+            <button type="submit">Add to Cart</button>
+        </div>
+        </form>
+      
+        {% if details['addons'] %}
+            <div class="pizza-addons">
+                <h3>Add-ons:</h3>
+                <ul>
+                    {% for addon, price in details['addons'].items() %}
+                        <li>{{ addon }} - ${{ price }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        {% endblock %}
+
+
