@@ -1,7 +1,16 @@
 import datetime
 import sqlite3
 import json
-from flask import Flask, flash, redirect, render_template, request, session, url_for
+from flask import (
+    Flask,
+    flash,
+    redirect,
+    render_template,
+    request,
+    session,
+    url_for,
+)
+
 app = Flask(__name__)
 app.secret_key = 'I_love_my_mom'
 app.secret_key = 'i_love_Liam_Nguyen'
@@ -55,15 +64,16 @@ def load_data():
     return pizza, addons
 
 
-@app.route('/orders')
-# the code that displays the order history page and retrieves the order data from the database.
+@app.route('/orders') # the code that displays the order history page and retrieves the order data from the database.
 def order_history():
     initialise_database()
     with sqlite3.connect('database.db') as conn:
         cursor = conn.cursor()
         cursor.execute('''
-            SELECT id, invoice_number, customer_name, email, address, card_name, card_number, card_expiry,
-                   cart, total, addons, order_date
+            SELECT
+                id, invoice_number, customer_name, email, address,
+                card_name, card_number, card_expiry, cart, total,
+                addons, order_date
             FROM pizza_orders
             ORDER BY id DESC
         ''')
@@ -88,7 +98,11 @@ def order_history():
 def pizza(pizza_name):
     pizza, addons = load_data()
     if pizza_name in pizza:
-        return render_template('pizza.html', pizza_name=pizza_name, details=pizza[pizza_name])
+        return render_template(
+            'pizza.html',
+            pizza_name=pizza_name,
+            details=pizza[pizza_name],
+        )
     else:
         flash('Pizza not found.')
         return redirect(url_for('index'))
@@ -107,18 +121,25 @@ def cancel_saved_order(order_id):
 
 
 @app.route('/calculate_total')
-# the code that calculates the total price of the order based on the selected pizza, size, quantity, and any selected add-ons.
+# the code that calculates the total price of the order based on the
+# selected pizza, size, quantity, and any selected add-ons.
 def calculate_total(cart, selected_addons):
     total = sum(details['quantity'] * details['price'] for details in cart.values())
     total += sum(price for price in selected_addons.values())
     discount_applied = False
-    total = sum(details['quantity'] * details['price'] for details in cart.values())
+    total = sum(
+        details['quantity'] * details['price']
+        for details in cart.values()
+    )
 
     if total > 100 and not discount_applied:
         discount = total * 0.10  # Calculate the discount amount
         total -= discount  # Apply the discount
         discount_applied = True
-        display_discount_message = f"A 10% discount has been applied to your order. You saved ${discount:.2f}."
+        display_discount_message = (
+            "A 10% discount has been applied to your order. "
+            f"You saved ${discount:.2f}."
+        )
         flash(display_discount_message)
 
     return total
@@ -129,17 +150,22 @@ def cancel_order():
     session.pop('cart', None)
     session.pop('selected_addons', None)
     flash('Your order has been cancelled.')
-    session.modified = True 
+    session.modified = True
     return redirect(url_for('index'))
 
 
 @app.route('/')
 def index():
     cart = session.get('cart', {})
-    selected_addons = session.get('selected_addons', {})#get selected add-ons from session
+    selected_addons = session.get(
+        'selected_addons', {}
+    )  # get selected add-ons from session
     pizza, addons = load_data()
-    total = calculate_total(cart, selected_addons)#calculate total price based on cart and selected add-ons
-    Supreme_Pizza_background = 'pizza-display.jpg' 
+    total = calculate_total(
+        cart,
+        selected_addons,
+    )  # calculate total price based on cart and selected add-ons
+    Supreme_Pizza_background = 'pizza-display.jpg'
     return render_template(
         'index.html',
         pizzas=pizza,
@@ -152,7 +178,7 @@ def index():
     )
 
 
-@app.route('/home')
+@app.route('/')
 def home():
     return redirect(url_for('index'))
 
@@ -162,7 +188,12 @@ def view_cart():
     cart = session.get('cart', {})
     selected_addons = session.get('selected_addons', {})
     total = calculate_total(cart, selected_addons)
-    return render_template('cart.html', cart=cart, selected_addons=selected_addons, total=total)
+    return render_template(
+        'cart.html',
+        cart=cart,
+        selected_addons=selected_addons,
+        total=total,
+    )
 
 
 @app.route('/about')
@@ -183,7 +214,7 @@ def add_to_cart():
 
     if pizza not in pizzas:
         flash(f"{pizza} is not available.")
-        return redirect(url_for('index')) # redirect to the index page if the pizza is not available    
+        return redirect(url_for('index'))  # redirect to index if unavailable
 
     prices = pizzas[pizza].get('sizes', {})
     if size not in prices or quantity < 1:
@@ -219,20 +250,20 @@ def remove_from_cart(item):
     return redirect('/')
 
 
-@app.route ('/selection_addon',methods=['POST'])
+@app.route('/selection_addon', methods=['POST'])
 def select_addon():
     selected_addons = {}
-    _, addons = load_data() # we only need addons
+    _, addons = load_data()  # we only need addons
 
-    selected_keys = request.form.getlist('addons')# get     featured_pizzas=    featured_pizzas=list(pizza.items())[:3] of selected addons
+    selected_keys = request.form.getlist('addons')
 
     for addon in selected_keys:
         if addon in addons:
-            selected_addons[addon] = float(addons[addon]['price']) # store selected addon and its price
+            selected_addons[addon] = float(addons[addon]['price'])
 
-    session['selected_addons'] = selected_addons  # store selected addons in session
-    session.modified = True # force flask to save the session
-    return redirect('/') # redirect to home or any other page where you want to display the selected addons
+    session['selected_addons'] = selected_addons
+    session.modified = True
+    return redirect('/')
 
 
 @app.route('/checkout', methods=['POST'])
@@ -309,7 +340,10 @@ def checkout():
             return redirect(url_for('view_cart'))
         
         if not cart:
-            flash("Your cart is empty. Please add items to your cart before proceeding to checkout.")
+            flash(
+                "Your cart is empty. Please add items to your cart before "
+                "proceeding to checkout."
+            )
             return redirect(url_for('index'))
 
         with open('data/pizza.json', 'r') as file:

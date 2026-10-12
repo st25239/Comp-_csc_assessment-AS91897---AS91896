@@ -288,6 +288,16 @@ footer {
   color: var(--muted);
   text-align: center;
 }
+.image-side {
+    flex: 1;
+    background-image: url('supreme_pizza_background.jpg');
+    background-size: cover;
+    background-position: top right;
+    background-repeat: no-repeat;
+    
+    position: relative;
+    height: 100vh;
+}
 
 @media (max-width: 720px) {
   nav ul {

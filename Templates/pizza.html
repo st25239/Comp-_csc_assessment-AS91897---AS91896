@@ -25,6 +25,7 @@
   {% endwith %}
 
         <div class="pizza-form">
+            <input type="hidden" name="pizza_name" value="{{ pizza_name }}">
             <label for="size">Size:</label>
             <select name="size" id="size">
                 {% for size, price in details['sizes'].items() %}
