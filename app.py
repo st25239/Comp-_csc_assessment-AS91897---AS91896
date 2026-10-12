@@ -136,10 +136,20 @@ def cancel_order():
 @app.route('/')
 def index():
     cart = session.get('cart', {})
-    selected_addons = session.get('selected_addons', {}) # get selected add-ons from session
+    selected_addons = session.get('selected_addons', {})#get selected add-ons from session
     pizza, addons = load_data()
-    total = calculate_total(cart, selected_addons) #calculate total price based on cart and selected add-ons
-    return render_template('index.html', pizzas=pizza, addons=addons, cart=cart, total=total, selected_addons=selected_addons, featured_pizzas=list(pizza.items()))
+    total = calculate_total(cart, selected_addons)#calculate total price based on cart and selected add-ons
+    Supreme_Pizza_background = 'pizza-display.jpg' 
+    return render_template(
+        'index.html',
+        pizzas=pizza,
+        addons=addons,
+        cart=cart,
+        total=total,
+        selected_addons=selected_addons,
+        pizza_image=Supreme_Pizza_background,
+        featured_pizzas=list(pizza.items())
+    )
 
 
 @app.route('/home')
