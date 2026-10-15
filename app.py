@@ -178,9 +178,9 @@ def index():
     )
 
 
-@app.route('/')
+@app.route('/home')
 def home():
-    return redirect(url_for('index'))
+    return render_template('home.html')
 
 
 @app.route('/view_cart')
@@ -203,7 +203,7 @@ def about():
 
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
-    pizza = request.form.get('pizza')
+    pizza = request.form.get('pizza_name')
     size = request.form.get('size', 'medium')
     pizzas, addons = load_data()  # Load pizza and addons data
     try:

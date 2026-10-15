@@ -24,7 +24,7 @@
                     <form action="{{ url_for('add_to_cart') }}" method="post">
                     <fieldset>
                     <legend>Choose a Pizza</legend>
-                       <select name="pizza" id="pizza" onchange="updatePrices()">
+                       <select name="pizza_name" id="pizza_name" onchange="updatePrices()">
                             {% for pizza, data in pizzas.items() %}
                                 <option value="{{ pizza }}" 
                                     data-small="{{ data['sizes']['small'] }}" 
@@ -69,7 +69,7 @@
                             {% for item, details in cart.items() %}
                                 <li>
                                     <div>
-                                        <strong>{{ item }}</strong> - Quantity: {{ details['quantity'] }} - Price: ${{ details['price'] }}
+                                        <strong>{{ item }}</strong> - Quantity: {{ details['quantity'] }} - Price: ${{ details['price'] }} - Size: {{ details['size'] }}
                                         <span>${{ '%.2f' % (details['quantity'] * details['price']) }}</span>
                                      </div>
                                      <a href="{{ url_for('remove_from_cart', item=item) }}" class="clear_cart">Remove</a>
