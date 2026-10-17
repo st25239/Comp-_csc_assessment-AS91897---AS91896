@@ -5,14 +5,14 @@
 {% block content %}
 <section class="hero">
   <div class="hero-copy">
-    <a>Welcome to Pizza Pizza where the best pizzas in town are made!</a>
-
+    <a>Welcome to Pizza Pizza where the best pizzas in town are made!</a> 
   </div>
   <img
   class="hero-pizza"
   src="{{ url_for('static', filename='images/supreme_pizza.png') }}"
   alt="Supreme pizza"
 >
+<a href="{{ url_for('index') }}" class="btn">Order Now</a>
 </section>
+
 {% endblock %}
-<a href="/index" class="btn">Explore Our Menu</a>

@@ -144,10 +144,7 @@ legend,
   font-weight: bold;
 }
 
-main {
-  width: min(900px, calc(100% - 32px));
-  margin: 0 auto;
-}
+
 
 body > h1,
 nav ul {
@@ -191,6 +188,7 @@ button {
   background: var(--tomato);
   cursor: pointer;
   font: bold 1rem Georgia, 'Times New Roman', serif;
+  max-width: 240px;
 }
 
 button:hover {
@@ -338,6 +336,7 @@ footer {
     overflow-x: auto;
     white-space: nowrap;
   }
+
 }
 
 a {
@@ -351,25 +350,43 @@ a {
   transform: scale(1.2); 
 }
 
-
+main {
+  width: 1000px;
+  margin: 0 auto;
+}
 
 .hero {
   position: relative;
   min-height: 360px;
   padding: 48px 32px;
+ 
 }
 
 .hero-copy {
   padding-right: 230px;
 }
 
+.hero .btn {
+  display: inline-block;
+  margin-top: 18px;
+  padding: 10px 16px;
+  border-radius: 4px;
+  color: white;
+  background: var(--tomato);
+}
+
+.hero .btn:hover {
+  background: var(--tomato-dark);
+}
+
 .hero-pizza {
   position: absolute;
   bottom: -200px;
-  left: 480px;
+  right: 1000px;
   width: 1000px;
   border-radius: 50%;
   animation: spin-pizza 24s linear infinite;
+  
 }
 
 @keyframes spin-pizza {
@@ -395,4 +412,14 @@ a {
   .hero-pizza {
     animation: none;
   }
+}
+
+.food_ingredients-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0;
+  width: 100px;
+  min-height: -1000px;
+  right: -600px;
 }
