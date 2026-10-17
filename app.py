@@ -338,7 +338,6 @@ def checkout():
         if not card_name:
             flash("Please enter the name on your card before checkout.")
             return redirect(url_for('view_cart'))
-        
         if not cart:
             flash(
                 "Your cart is empty. Please add items to your cart before "

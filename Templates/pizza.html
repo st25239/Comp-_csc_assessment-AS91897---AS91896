@@ -3,16 +3,16 @@
 {% block title %}Pizza Place{% endblock %}
 
 {% block content %}
-<div class="pizza-page-main">
-    <div class="pizza-storage">
-        <img src="{{ url_for('static', filename=details['img_path']) }}">
-    </div>
-    <div class="pizza-infomation-and-form">
+<div class="pizza-infomation-and-form">
         <div class="pizza-infomation">
             <h1 name="pizza" id="pizza">{{ pizza_name.replace("-", " ")|title }}</h1>
             <h2>From ${{ (details['sizes'] | dictsort(false, 'value'))[0][1] }}</h2>
             <p>{{ details['description'] }}</p>
         </div>
+<div class="pizza-page-main">
+    <div class="pizza-storage">
+          src="{{ url_for('static', filename='images/pizza_pizza.png') }}"
+    </div>
         <form action="{{ url_for('add_to_cart' )}}" method="POST">
         {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}

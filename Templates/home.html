@@ -5,14 +5,14 @@
 {% block content %}
 <section class="hero">
   <div class="hero-copy">
-    <h1>Welcome to Supreme Pizza</h1>
-    <p>Experience the ultimate pizza indulgence with our handcrafted, gourmet creations.</p>
-    <a href="/menu" class="btn">Explore Our Menu</a>
+    <a>Welcome to Pizza Pizza where the best pizzas in town are made!</a>
+
   </div>
   <img
-    class="hero-pizza"
-    src="{{ url_for('static', filename='images/Supreme_Pizza_Background.png') }}"
-    alt="Supreme pizza topped with pepperoni, vegetables, and olives"
-  >
+  class="hero-pizza"
+  src="{{ url_for('static', filename='images/supreme_pizza.png') }}"
+  alt="Supreme pizza"
+>
 </section>
 {% endblock %}
+<a href="/index" class="btn">Explore Our Menu</a>
